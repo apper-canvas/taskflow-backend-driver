@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 1,
+    "name": "Work",
+    "color": "#5B4FCF",
+    "icon": "Briefcase"
+  },
+  {
+    "Id": 2,
+    "name": "Health",
+    "color": "#4CAF50",
+    "icon": "Heart"
+  },
+  {
+    "Id": 3,
+    "name": "Personal",
+    "color": "#FF9800",
+    "icon": "User"
+  },
+  {
+    "Id": 4,
+    "name": "Learning",
+    "color": "#2196F3",
+    "icon": "BookOpen"
+  },
+  {
+    "Id": 5,
+    "name": "Finance",
+    "color": "#9C27B0",
+    "icon": "DollarSign"
+  },
+  {
+    "Id": 6,
+    "name": "Home",
+    "color": "#FF6B6B",
+    "icon": "Home"
+  }
+]

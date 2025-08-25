@@ -1,0 +1,117 @@
+@import 'react-toastify/dist/ReactToastify.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  background-color: #F7F9FC;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.Toastify__toast-container {
+  z-index: 9999;
+  padding: 8px;
+}
+
+.Toastify__toast {
+  padding: 16px;
+  border-radius: 12px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #FF6B6B 0%, #ff5252 100%);
+  color: white;
+}
+
+.Toastify__toast--info {
+  background: linear-gradient(135deg, #5B4FCF 0%, #4A3FB5 100%);
+  color: white;
+}
+
+.Toastify__progress-bar--success {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.Toastify__progress-bar--error {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.Toastify__progress-bar--info {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.checkbox-animation {
+  transition: all 0.2s ease-out;
+}
+
+.checkbox-animation:checked {
+  transform: scale(1.05);
+}
+
+.task-card {
+  transition: all 0.2s ease-out;
+}
+
+.task-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px -5px rgba(91, 79, 207, 0.1);
+}
+
+.task-complete {
+  animation: taskComplete 0.5s ease-out forwards;
+}
+
+@keyframes taskComplete {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.02); }
+  100% { opacity: 0.6; transform: scale(0.98); }
+}
+
+.priority-high {
+  border-left: 4px solid #FF6B6B;
+}
+
+.priority-medium {
+  border-left: 4px solid #FF9800;
+}
+
+.priority-low {
+  border-left: 4px solid #4CAF50;
+}
+
+.category-pill {
+  transition: all 0.2s ease-out;
+}
+
+.category-pill:hover {
+  transform: scale(1.05);
+}
+
+.progress-ring {
+  transition: stroke-dasharray 0.3s ease-out;
+}

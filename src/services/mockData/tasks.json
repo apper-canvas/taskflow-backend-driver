@@ -1,0 +1,90 @@
+[
+  {
+    "Id": 1,
+    "title": "Review quarterly reports",
+    "description": "Analyze Q4 performance metrics and prepare summary for board meeting",
+    "categoryId": 1,
+    "priority": "high",
+    "dueDate": "2024-01-15",
+    "completed": false,
+    "createdAt": "2024-01-10T09:00:00.000Z",
+    "completedAt": null
+  },
+  {
+    "Id": 2,
+    "title": "Update project documentation",
+    "description": "Revise API documentation and add new endpoint specifications",
+    "categoryId": 1,
+    "priority": "medium",
+    "dueDate": "2024-01-20",
+    "completed": false,
+    "createdAt": "2024-01-09T14:30:00.000Z",
+    "completedAt": null
+  },
+  {
+    "Id": 3,
+    "title": "Morning workout routine",
+    "description": "45-minute cardio session at the gym",
+    "categoryId": 2,
+    "priority": "medium",
+    "dueDate": "2024-01-12",
+    "completed": true,
+    "createdAt": "2024-01-09T06:00:00.000Z",
+    "completedAt": "2024-01-12T07:30:00.000Z"
+  },
+  {
+    "Id": 4,
+    "title": "Grocery shopping",
+    "description": "Buy ingredients for weekend meal prep and household essentials",
+    "categoryId": 3,
+    "priority": "low",
+    "dueDate": "2024-01-13",
+    "completed": false,
+    "createdAt": "2024-01-08T16:45:00.000Z",
+    "completedAt": null
+  },
+  {
+    "Id": 5,
+    "title": "Learn React Hooks",
+    "description": "Complete advanced React Hooks course on Udemy",
+    "categoryId": 4,
+    "priority": "high",
+    "dueDate": "2024-01-25",
+    "completed": false,
+    "createdAt": "2024-01-07T20:15:00.000Z",
+    "completedAt": null
+  },
+  {
+    "Id": 6,
+    "title": "Team stand-up meeting",
+    "description": "Daily sync with development team at 9 AM",
+    "categoryId": 1,
+    "priority": "medium",
+    "dueDate": "2024-01-12",
+    "completed": true,
+    "createdAt": "2024-01-07T08:00:00.000Z",
+    "completedAt": "2024-01-12T09:15:00.000Z"
+  },
+  {
+    "Id": 7,
+    "title": "Plan weekend trip",
+    "description": "Research destinations and book accommodation for February getaway",
+    "categoryId": 3,
+    "priority": "low",
+    "dueDate": "2024-01-18",
+    "completed": false,
+    "createdAt": "2024-01-06T19:30:00.000Z",
+    "completedAt": null
+  },
+  {
+    "Id": 8,
+    "title": "Prepare presentation slides",
+    "description": "Create slides for client presentation on new product features",
+    "categoryId": 1,
+    "priority": "high",
+    "dueDate": "2024-01-14",
+    "completed": false,
+    "createdAt": "2024-01-05T11:20:00.000Z",
+    "completedAt": null
+  }
+]
