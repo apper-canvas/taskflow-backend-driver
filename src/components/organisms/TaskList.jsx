@@ -15,9 +15,9 @@ const TaskList = ({
   onAddTask,
   searchTerm,
   selectedCategory,
-  sortBy 
+  sortBy
 }) => {
-  const [completingTasks, setCompletingTasks] = useState(new Set());
+const [completingTasks, setCompletingTasks] = useState(new Set());
 
   const handleToggleComplete = async (taskId) => {
     setCompletingTasks(prev => new Set([...prev, taskId]));
@@ -51,7 +51,7 @@ const TaskList = ({
     }
   };
 
-  // Filter and sort tasks
+// Filter and sort tasks
   let filteredTasks = tasks;
 
   // Filter by search term
@@ -154,7 +154,7 @@ const TaskList = ({
             {incompleteTasks.map((task) => {
               const category = categories.find(c => c.Id === task.categoryId);
               return (
-                <TaskCard
+<TaskCard
                   key={task.Id}
                   task={task}
                   category={category}
@@ -187,7 +187,7 @@ const TaskList = ({
               const category = categories.find(c => c.Id === task.categoryId);
               return (
                 <TaskCard
-                  key={task.Id}
+key={task.Id}
                   task={task}
                   category={category}
                   onToggleComplete={handleToggleComplete}
@@ -201,7 +201,7 @@ const TaskList = ({
         </div>
       )}
     </div>
-  );
+);
 };
 
 export default TaskList;

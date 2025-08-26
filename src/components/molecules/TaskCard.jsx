@@ -75,7 +75,17 @@ return (
               {task.title}
             </h3>
             
-            <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity ml-4">
+<div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity ml-4">
+              {task.isRecurring && (
+                <div className="flex items-center mr-2">
+                  <ApperIcon 
+                    name="Calendar" 
+                    size={12} 
+                    className="text-primary-500" 
+                    title="Recurring Task" 
+                  />
+                </div>
+              )}
               <Button
                 variant="ghost"
                 size="sm"

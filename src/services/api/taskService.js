@@ -24,11 +24,17 @@ class TaskService {
     await new Promise(resolve => setTimeout(resolve, 400));
     
     const newTask = {
-      Id: Math.max(...this.tasks.map(t => t.Id), 0) + 1,
+Id: Math.max(...this.tasks.map(t => t.Id), 0) + 1,
       ...taskData,
       createdAt: taskData.createdAt || new Date().toISOString(),
       completedAt: null
     };
+
+    // If it's a recurring task, generate additional instances
+    if (taskData.isRecurring && taskData.recurrence) {
+      const recurringTasks = this.generateRecurringTasks(newTask);
+      this.tasks.push(...recurringTasks);
+    }
     
     this.tasks.unshift(newTask);
     return { ...newTask };
@@ -43,11 +49,92 @@ class TaskService {
     }
 
     this.tasks[taskIndex] = {
-      ...this.tasks[taskIndex],
+...this.tasks[taskIndex],
       ...updateData
     };
 
+    // If recurrence settings changed, regenerate recurring tasks
+    if (updateData.isRecurring !== undefined || updateData.recurrence) {
+      // Remove old recurring instances if they exist
+      this.tasks = this.tasks.filter(task => !task.parentTaskId || task.parentTaskId !== id);
+      
+      // Generate new recurring instances if still recurring
+      if (this.tasks[taskIndex].isRecurring && this.tasks[taskIndex].recurrence) {
+        const recurringTasks = this.generateRecurringTasks(this.tasks[taskIndex]);
+        this.tasks.push(...recurringTasks);
+      }
+    }
+
     return { ...this.tasks[taskIndex] };
+  }
+
+  generateRecurringTasks(parentTask) {
+    const { recurrence } = parentTask;
+    if (!recurrence) return [];
+
+    const tasks = [];
+    const startDate = new Date(recurrence.startDate || parentTask.dueDate || new Date());
+    const maxInstances = recurrence.endType === "after" ? recurrence.endAfter : 50; // Limit to 50 if no end specified
+    
+    let currentDate = new Date(startDate);
+    let instanceCount = 0;
+    const endDate = recurrence.endType === "on" ? new Date(recurrence.endOn) : null;
+
+    while (instanceCount < maxInstances) {
+      // Calculate next occurrence
+      if (recurrence.interval === "daily") {
+        currentDate.setDate(currentDate.getDate() + recurrence.frequency);
+      } else if (recurrence.interval === "weekly") {
+        if (recurrence.daysOfWeek && recurrence.daysOfWeek.length > 0) {
+          // Find next occurrence based on selected days of week
+          let daysToAdd = 1;
+          let nextDay = (currentDate.getDay() + 1) % 7;
+          while (!recurrence.daysOfWeek.includes(nextDay)) {
+            daysToAdd++;
+            nextDay = (nextDay + 1) % 7;
+            if (daysToAdd > 7) break; // Safety check
+          }
+          currentDate.setDate(currentDate.getDate() + daysToAdd);
+        } else {
+          currentDate.setDate(currentDate.getDate() + (7 * recurrence.frequency));
+        }
+      } else if (recurrence.interval === "monthly") {
+        if (recurrence.monthlyType === "lastDay") {
+          // Last day of next month
+          currentDate.setMonth(currentDate.getMonth() + recurrence.frequency + 1, 0);
+        } else {
+          // Specific date
+          const nextMonth = new Date(currentDate);
+          nextMonth.setMonth(nextMonth.getMonth() + recurrence.frequency);
+          nextMonth.setDate(recurrence.monthlyDate);
+          currentDate = nextMonth;
+        }
+      }
+
+      // Check end conditions
+      if (endDate && currentDate > endDate) break;
+      if (recurrence.endType === "after" && instanceCount >= recurrence.endAfter - 1) break;
+
+      // Create recurring task instance
+      const recurringTask = {
+        ...parentTask,
+        Id: Math.max(...this.tasks.map(t => t.Id), 0) + tasks.length + 2,
+        dueDate: currentDate.toISOString(),
+        createdAt: new Date().toISOString(),
+        parentTaskId: parentTask.Id,
+        recurringInstance: true,
+        completed: false,
+        completedAt: null
+      };
+
+      tasks.push(recurringTask);
+      instanceCount++;
+
+      // Safety check to prevent infinite loops
+      if (instanceCount > 100) break;
+    }
+
+    return tasks;
   }
 
   async delete(id) {

@@ -52,7 +52,7 @@ const TaskManagerPage = () => {
   }, []);
 
   // Task operations
-  const handleAddTask = async (taskData) => {
+const handleAddTask = async (taskData) => {
     try {
       const newTask = await taskService.create({
         ...taskData,
@@ -69,11 +69,10 @@ const TaskManagerPage = () => {
   };
 
   const handleEditTask = async (taskData) => {
-    try {
+try {
       const updatedTask = await taskService.update(editingTask.Id, taskData);
-      setTasks(prev => prev.map(task => 
-        task.Id === editingTask.Id ? updatedTask : task
-      ));
+      // Reload all tasks to get updated recurring instances
+      await loadData();
       toast.success("Task updated successfully! ✏️");
       setEditingTask(null);
     } catch (err) {

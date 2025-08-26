@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import RecurringTaskModal from "@/components/organisms/RecurringTaskModal";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
 import Badge from "@/components/atoms/Badge";
-
+import Input from "@/components/atoms/Input";
 const AddTaskModal = ({ 
   isOpen, 
   onClose, 
@@ -12,15 +12,19 @@ const AddTaskModal = ({
   categories, 
   editTask = null 
 }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     title: "",
     description: "",
     categoryId: "",
     priority: "medium",
-    dueDate: ""
+    dueDate: "",
+    isRecurring: false,
+    recurrence: null
   });
 
   const [errors, setErrors] = useState({});
+
+const [showRecurringModal, setShowRecurringModal] = useState(false);
 
   useEffect(() => {
     if (editTask) {
@@ -29,7 +33,9 @@ const AddTaskModal = ({
         description: editTask.description || "",
         categoryId: editTask.categoryId || "",
         priority: editTask.priority || "medium",
-        dueDate: editTask.dueDate ? editTask.dueDate.split('T')[0] : ""
+        dueDate: editTask.dueDate ? editTask.dueDate.split('T')[0] : "",
+        isRecurring: editTask.isRecurring || false,
+        recurrence: editTask.recurrence || null
       });
     } else {
       setFormData({
@@ -37,12 +43,13 @@ const AddTaskModal = ({
         description: "",
         categoryId: categories.length > 0 ? categories[0].Id : "",
         priority: "medium",
-        dueDate: ""
+        dueDate: "",
+        isRecurring: false,
+        recurrence: null
       });
     }
     setErrors({});
   }, [editTask, categories, isOpen]);
-
   const validateForm = () => {
     const newErrors = {};
     
@@ -63,11 +70,13 @@ const AddTaskModal = ({
     
     if (!validateForm()) return;
 
-    const taskData = {
+const taskData = {
       ...formData,
       title: formData.title.trim(),
       description: formData.description.trim(),
-      dueDate: formData.dueDate || null
+      dueDate: formData.dueDate || null,
+      isRecurring: formData.isRecurring,
+      recurrence: formData.isRecurring ? formData.recurrence : null
     };
 
     onSave(taskData);
@@ -76,11 +85,18 @@ const AddTaskModal = ({
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
+if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
   };
 
+  const handleRecurringSave = (recurrenceConfig) => {
+    setFormData(prev => ({
+      ...prev,
+      recurrence: recurrenceConfig
+    }));
+    setShowRecurringModal(false);
+  };
   if (!isOpen) return null;
 
   return (
@@ -194,7 +210,64 @@ const AddTaskModal = ({
                 value={formData.dueDate}
                 onChange={(e) => handleChange("dueDate", e.target.value)}
               />
+{/* Recurring Task Options */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                          <ApperIcon name="Repeat" size={16} className="text-primary-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-900">Make Recurring</h3>
+                          <p className="text-sm text-gray-600">Set up automatic task repetition</p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.isRecurring}
+                          onChange={(e) => handleChange("isRecurring", e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-primary-500 peer-checked:to-primary-600"></div>
+                      </label>
+                    </div>
 
+                    {formData.isRecurring && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="space-y-4"
+                      >
+                        <div className="flex items-center justify-between p-4 bg-primary-50 rounded-xl border border-primary-200">
+                          <div>
+                            <h4 className="font-medium text-primary-800">Recurrence Configuration</h4>
+                            {formData.recurrence ? (
+                              <p className="text-sm text-primary-700 mt-1">
+                                Every {formData.recurrence.frequency > 1 ? formData.recurrence.frequency + " " : ""}
+                                {formData.recurrence.interval}
+                                {formData.recurrence.frequency !== 1 ? "s" : ""}
+                                {formData.recurrence.interval === "weekly" && formData.recurrence.daysOfWeek?.length > 0 && 
+                                  ` on selected days`}
+                              </p>
+                            ) : (
+                              <p className="text-sm text-primary-600 mt-1">Click to configure recurring settings</p>
+                            )}
+                          </div>
+                          <Button
+                            type="button"
+                            variant="primary"
+                            size="sm"
+                            onClick={() => setShowRecurringModal(true)}
+                          >
+                            <ApperIcon name="Settings" size={14} className="mr-2" />
+                            Configure Recurring
+                          </Button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
               <div className="flex space-x-3 pt-4">
                 <Button
                   type="button"
@@ -216,7 +289,16 @@ const AddTaskModal = ({
             </form>
           </div>
         </motion.div>
+</motion.div>
       </div>
+
+      {/* Recurring Task Modal */}
+      <RecurringTaskModal
+        isOpen={showRecurringModal}
+        onClose={() => setShowRecurringModal(false)}
+        onSave={handleRecurringSave}
+        initialConfig={formData.recurrence}
+      />
     </AnimatePresence>
   );
 };
