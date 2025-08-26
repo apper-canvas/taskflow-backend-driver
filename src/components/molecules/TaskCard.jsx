@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { motion } from "framer-motion";
 import { format, isToday, isTomorrow, isPast } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
@@ -6,14 +7,14 @@ import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
 import { cn } from "@/utils/cn";
 
-const TaskCard = ({ 
+const TaskCard = forwardRef(({ 
   task, 
   category, 
   onToggleComplete, 
   onEdit, 
   onDelete,
   isCompleting = false
-}) => {
+}, ref) => {
   const priorityColors = {
     high: "priority-high border-accent-200",
     medium: "priority-medium border-yellow-200", 
@@ -44,8 +45,9 @@ const TaskCard = ({
     return "text-gray-600";
   };
 
-  return (
+return (
     <motion.div
+      ref={ref}
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -138,8 +140,10 @@ const TaskCard = ({
           </div>
         </div>
       </div>
-    </motion.div>
+</motion.div>
   );
-};
+});
+
+TaskCard.displayName = "TaskCard";
 
 export default TaskCard;
