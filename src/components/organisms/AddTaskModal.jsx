@@ -287,11 +287,9 @@ if (errors[field]) {
                 </Button>
               </div>
             </form>
-          </div>
+</div>
         </motion.div>
-</motion.div>
       </div>
-
       {/* Recurring Task Modal */}
       <RecurringTaskModal
         isOpen={showRecurringModal}
