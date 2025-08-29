@@ -166,6 +166,10 @@ try {
             <h1 className="text-3xl font-display font-bold text-gray-900 mb-2">
               TaskFlow
             </h1>
+            <Button onClick={() => { 
+              let abc = {};
+              console.log('abc :', abc.length());
+            }}>Click Me</Button>
             <p className="text-gray-600">
               Organize and complete your daily tasks efficiently
             </p>
