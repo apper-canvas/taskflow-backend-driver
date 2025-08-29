@@ -68,9 +68,9 @@ const handleAddTask = async (taskData) => {
     }
   };
 
-  const handleEditTask = async (taskData) => {
-try {
-      const updatedTask = await taskService.update(editingTask.Id, taskData);
+const handleEditTask = async (taskData) => {
+    try {
+      const updatedTask = await taskService.update(editingTask.id, taskData);
       // Reload all tasks to get updated recurring instances
       await loadData();
       toast.success("Task updated successfully! ✏️");
@@ -80,7 +80,6 @@ try {
       console.error("Error updating task:", err);
     }
   };
-
   const handleToggleComplete = async (taskId) => {
     try {
       const task = tasks.find(t => t.Id === taskId);
@@ -162,14 +161,10 @@ try {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-8"
         >
-          <div>
+<div>
             <h1 className="text-3xl font-display font-bold text-gray-900 mb-2">
               TaskFlow
             </h1>
-            <Button onClick={() => { 
-              let abc = {};
-              console.log('abc :', abc.length());
-            }}>Click Me</Button>
             <p className="text-gray-600">
               Organize and complete your daily tasks efficiently
             </p>
