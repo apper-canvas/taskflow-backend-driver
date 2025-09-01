@@ -9,6 +9,7 @@ import ProgressWidget from "@/components/molecules/ProgressWidget";
 import FilterBar from "@/components/organisms/FilterBar";
 import TaskList from "@/components/organisms/TaskList";
 import AddTaskModal from "@/components/organisms/AddTaskModal";
+import TemplatePickerModal from "@/components/organisms/TemplatePickerModal";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import taskService from "@/services/api/taskService";
@@ -25,9 +26,9 @@ const TaskManagerPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [sortBy, setSortBy] = useState("recent");
   const [showCompleted, setShowCompleted] = useState(true);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
-
   // Load initial data
   const loadData = async () => {
     try {
@@ -113,6 +114,21 @@ const handleEditTask = async (taskData) => {
     setEditingTask(task);
     setIsAddModalOpen(true);
   };
+const handleSelectTemplate = async (templateTaskData) => {
+    try {
+      const newTask = await taskService.create({
+        ...templateTaskData,
+        completed: false,
+        createdAt: new Date().toISOString(),
+        completedAt: null
+      });
+      setTasks(prev => [newTask, ...prev]);
+      setIsTemplateModalOpen(false);
+    } catch (err) {
+      toast.error("Failed to create task from template. Please try again.");
+      console.error("Error creating task from template:", err);
+    }
+  };
 
   const closeModal = () => {
     setIsAddModalOpen(false);
@@ -169,15 +185,26 @@ const handleEditTask = async (taskData) => {
               Organize and complete your daily tasks efficiently
             </p>
           </div>
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-          >
-            <ApperIcon name="Plus" size={16} className="mr-2" />
-            Add Task
-          </Button>
+<div className="flex space-x-3">
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => setIsTemplateModalOpen(true)}
+              className="shadow-sm hover:shadow-md transform hover:scale-105 transition-all duration-200"
+            >
+              <ApperIcon name="FileTemplate" size={16} className="mr-2" />
+              Templates
+            </Button>
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => setIsAddModalOpen(true)}
+              className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+            >
+              <ApperIcon name="Plus" size={16} className="mr-2" />
+              Add Task
+            </Button>
+          </div>
         </motion.div>
 
         {/* Progress Widget */}
@@ -250,13 +277,21 @@ const handleEditTask = async (taskData) => {
           </div>
         </div>
 
-        {/* Add/Edit Task Modal */}
+{/* Add/Edit Task Modal */}
         <AddTaskModal
           isOpen={isAddModalOpen}
           onClose={closeModal}
           onSave={handleSaveTask}
           categories={categories}
           editTask={editingTask}
+        />
+
+        {/* Template Picker Modal */}
+        <TemplatePickerModal
+          isOpen={isTemplateModalOpen}
+          onClose={() => setIsTemplateModalOpen(false)}
+          onSelectTemplate={handleSelectTemplate}
+          categories={categories}
         />
       </div>
     </div>

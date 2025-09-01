@@ -1,0 +1,49 @@
+[
+  {
+    "Id": 1,
+    "name": "Daily Morning Workout",
+    "description": "45-minute cardio and strength training session",
+    "categoryId": 2,
+    "taskData": {
+      "title": "Morning workout routine",
+      "description": "45-minute cardio session at the gym",
+      "categoryId": 2,
+      "priority": "medium",
+      "isRecurring": true,
+      "recurrence": {
+        "interval": "daily",
+        "frequency": 1,
+        "startDate": "2024-01-15",
+        "endType": "never"
+      }
+    },
+    "dueDateType": "relative",
+    "relativeDueDate": "today",
+    "usageCount": 15,
+    "createdAt": "2024-01-01T09:00:00.000Z",
+    "updatedAt": "2024-01-10T09:00:00.000Z",
+    "lastUsed": "2024-01-12T07:00:00.000Z"
+  },
+  {
+    "Id": 2,
+    "name": "Weekly Team Report",
+    "description": "Comprehensive team progress and metrics report",
+    "categoryId": 1,
+    "taskData": {
+      "title": "Prepare weekly team report",
+      "description": "Compile team metrics, achievements, and upcoming goals",
+      "categoryId": 1,
+      "priority": "high",
+      "isRecurring": true,
+      "recurrence": {
+        "interval": "weekly",
+        "frequency": 1,
+        "daysOfWeek": [5],
+        "startDate": "2024-01-12",
+        "endType": "never"
+      }
+    },
+    "dueDateType": "relative",
+    "relativeDueDate": "tomorrow"
+  }
+]

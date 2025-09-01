@@ -168,6 +168,24 @@ Id: Math.max(...this.tasks.map(t => t.Id), 0) + 1,
     await new Promise(resolve => setTimeout(resolve, 300));
     return this.tasks.filter(task => !task.completed);
   }
+// Template operations
+  async getTemplates() {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    // Import templates from separate service would go here
+    return [];
+  }
+
+  async createTemplate(templateData) {
+    await new Promise(resolve => setTimeout(resolve, 400));
+    // Template creation logic would go here
+    return templateData;
+  }
+
+  async createTaskFromTemplate(templateId) {
+    await new Promise(resolve => setTimeout(resolve, 400));
+    // Template to task conversion would go here
+    return null;
+  }
 }
 
 export default new TaskService();
