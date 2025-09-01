@@ -148,7 +148,31 @@ Id: Math.max(...this.tasks.map(t => t.Id), 0) + 1,
     this.tasks.splice(taskIndex, 1);
     return true;
   }
-async getByCategory(categoryId) {
+// Bulk operations
+  async bulkUpdate(taskIds, updateData) {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    taskIds.forEach(id => {
+      const taskIndex = this.tasks.findIndex(t => t.Id === id);
+      if (taskIndex !== -1) {
+        this.tasks[taskIndex] = {
+          ...this.tasks[taskIndex],
+          ...updateData
+        };
+      }
+    });
+    
+    return this.tasks.filter(task => taskIds.includes(task.Id));
+  }
+
+  async bulkDelete(taskIds) {
+    await new Promise(resolve => setTimeout(resolve, 400));
+    
+    this.tasks = this.tasks.filter(task => !taskIds.includes(task.Id));
+    return true;
+  }
+
+  async getByCategory(categoryId) {
     await new Promise(resolve => setTimeout(resolve, 300));
     return this.tasks.filter(task => task.categoryId === categoryId);
   }

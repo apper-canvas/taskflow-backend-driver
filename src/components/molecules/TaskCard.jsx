@@ -14,7 +14,10 @@ const TaskCard = forwardRef(({
   onEdit, 
   onDelete,
   isCompleting = false,
-  isArchiveView = false
+  isArchiveView = false,
+  isSelected = false,
+  onSelect,
+  showSelection = false
 }, ref) => {
   const priorityColors = {
     high: "priority-high border-accent-200",
@@ -61,11 +64,22 @@ return (
       )}
     >
       <div className="flex items-start space-x-4">
-        <Checkbox
-          checked={task.completed}
-          onChange={() => onToggleComplete(task.Id)}
-          className="mt-1"
-        />
+<div className="flex items-center space-x-2">
+          {showSelection && (
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={(e) => onSelect && onSelect(e.target.checked)}
+              onClick={(e) => e.stopPropagation()}
+              className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            />
+          )}
+          <Checkbox
+            checked={task.completed}
+            onChange={() => onToggleComplete(task.Id)}
+            className="mt-1"
+          />
+        </div>
         
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-2">
@@ -76,7 +90,10 @@ return (
               {task.title}
             </h3>
             
-<div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity ml-4">
+<div className={cn(
+            "flex items-center space-x-1 transition-opacity ml-4",
+            isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          )}>
               {task.isRecurring && (
                 <div className="flex items-center mr-2">
                   <ApperIcon 

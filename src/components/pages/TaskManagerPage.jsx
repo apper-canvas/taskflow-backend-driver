@@ -29,6 +29,7 @@ const TaskManagerPage = () => {
 const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [selectedTasks, setSelectedTasks] = useState(new Set());
   // Load initial data
   const loadData = async () => {
     try {
@@ -52,8 +53,8 @@ const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     loadData();
   }, []);
 
-  // Task operations
-const handleAddTask = async (taskData) => {
+// Task operations
+  const handleAddTask = async (taskData) => {
     try {
       const newTask = await taskService.create({
         ...taskData,
@@ -69,7 +70,7 @@ const handleAddTask = async (taskData) => {
     }
   };
 
-const handleEditTask = async (taskData) => {
+  const handleEditTask = async (taskData) => {
     try {
       const updatedTask = await taskService.update(editingTask.id, taskData);
       // Reload all tasks to get updated recurring instances
@@ -81,6 +82,7 @@ const handleEditTask = async (taskData) => {
       console.error("Error updating task:", err);
     }
   };
+  
   const handleToggleComplete = async (taskId) => {
     try {
       const task = tasks.find(t => t.Id === taskId);
@@ -110,11 +112,67 @@ const handleEditTask = async (taskData) => {
     }
   };
 
+  // Bulk operations
+  const handleBulkComplete = async (taskIds) => {
+    try {
+      await taskService.bulkUpdate(taskIds, {
+        completed: true,
+        completedAt: new Date().toISOString()
+      });
+      
+      setTasks(prev => prev.map(t => 
+        taskIds.includes(t.Id) 
+          ? { ...t, completed: true, completedAt: new Date().toISOString() }
+          : t
+      ));
+      
+      setSelectedTasks(new Set());
+      toast.success(`${taskIds.length} tasks completed! 🎉`);
+    } catch (err) {
+      toast.error("Failed to complete selected tasks. Please try again.");
+      console.error("Error completing tasks:", err);
+    }
+  };
+
+  const handleBulkDelete = async (taskIds) => {
+    try {
+      await taskService.bulkDelete(taskIds);
+      
+      setTasks(prev => prev.filter(task => !taskIds.includes(task.Id)));
+      setSelectedTasks(new Set());
+      toast.success(`${taskIds.length} tasks deleted successfully`);
+    } catch (err) {
+      toast.error("Failed to delete selected tasks. Please try again.");
+      console.error("Error deleting tasks:", err);
+    }
+  };
+
+  const handleSelectTask = (taskId, isSelected) => {
+    setSelectedTasks(prev => {
+      const newSet = new Set(prev);
+      if (isSelected) {
+        newSet.add(taskId);
+      } else {
+        newSet.delete(taskId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = (taskIds) => {
+    setSelectedTasks(new Set(taskIds));
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedTasks(new Set());
+  };
+
   const openEditModal = (task) => {
     setEditingTask(task);
     setIsAddModalOpen(true);
   };
-const handleSelectTemplate = async (templateTaskData) => {
+
+  const handleSelectTemplate = async (templateTaskData) => {
     try {
       const newTask = await taskService.create({
         ...templateTaskData,
@@ -272,7 +330,7 @@ const handleSelectTemplate = async (templateTaskData) => {
               transition={{ delay: 0.4 }}
             >
               <TaskList
-                tasks={showCompleted ? tasks : tasks.filter(task => !task.completed)}
+tasks={showCompleted ? tasks : tasks.filter(task => !task.completed)}
                 categories={categories}
                 onToggleComplete={handleToggleComplete}
                 onEditTask={openEditModal}
@@ -281,6 +339,12 @@ const handleSelectTemplate = async (templateTaskData) => {
                 searchTerm={searchTerm}
                 selectedCategory={selectedCategory}
                 sortBy={sortBy}
+                selectedTasks={selectedTasks}
+                onSelectTask={handleSelectTask}
+                onBulkComplete={handleBulkComplete}
+                onBulkDelete={handleBulkDelete}
+                onSelectAll={handleSelectAll}
+                onDeselectAll={handleDeselectAll}
               />
             </motion.div>
           </div>
