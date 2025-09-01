@@ -15,7 +15,8 @@ const TaskList = ({
   onAddTask,
   searchTerm,
   selectedCategory,
-  sortBy
+  sortBy,
+  isArchiveView = false
 }) => {
 const [completingTasks, setCompletingTasks] = useState(new Set());
 
@@ -135,7 +136,7 @@ const [completingTasks, setCompletingTasks] = useState(new Set());
             <h2 className="text-lg font-display font-semibold text-gray-900">
               Active Tasks ({incompleteTasks.length})
             </h2>
-            {completedTasks.length > 0 && (
+{!isArchiveView && completedTasks.length > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -170,7 +171,7 @@ const [completingTasks, setCompletingTasks] = useState(new Set());
       )}
 
       {/* Completed Tasks */}
-      {completedTasks.length > 0 && (
+{!isArchiveView && completedTasks.length > 0 && (
         <div id="completed-tasks" className="space-y-4">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -186,14 +187,15 @@ const [completingTasks, setCompletingTasks] = useState(new Set());
             {completedTasks.map((task) => {
               const category = categories.find(c => c.Id === task.categoryId);
               return (
-                <TaskCard
-key={task.Id}
+<TaskCard
+                  key={task.Id}
                   task={task}
                   category={category}
                   onToggleComplete={handleToggleComplete}
                   onEdit={onEditTask}
                   onDelete={handleDeleteTask}
                   isCompleting={completingTasks.has(task.Id)}
+                  isArchiveView={isArchiveView}
                 />
               );
             })}

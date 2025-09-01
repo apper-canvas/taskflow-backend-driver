@@ -189,6 +189,15 @@ const handleSelectTemplate = async (templateTaskData) => {
             <Button
               variant="secondary"
               size="lg"
+              onClick={() => window.location.href = '/archive'}
+              className="shadow-sm hover:shadow-md transform hover:scale-105 transition-all duration-200"
+            >
+              <ApperIcon name="Archive" size={16} className="mr-2" />
+              Archive
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
               onClick={() => setIsTemplateModalOpen(true)}
               className="shadow-sm hover:shadow-md transform hover:scale-105 transition-all duration-200"
             >

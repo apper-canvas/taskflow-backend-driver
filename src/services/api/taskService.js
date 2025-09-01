@@ -148,8 +148,7 @@ Id: Math.max(...this.tasks.map(t => t.Id), 0) + 1,
     this.tasks.splice(taskIndex, 1);
     return true;
   }
-
-  async getByCategory(categoryId) {
+async getByCategory(categoryId) {
     await new Promise(resolve => setTimeout(resolve, 300));
     return this.tasks.filter(task => task.categoryId === categoryId);
   }
@@ -162,6 +161,13 @@ Id: Math.max(...this.tasks.map(t => t.Id), 0) + 1,
   async getCompleted() {
     await new Promise(resolve => setTimeout(resolve, 300));
     return this.tasks.filter(task => task.completed);
+  }
+
+  async getArchived() {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return this.tasks.filter(task => task.completed).sort((a, b) => 
+      new Date(b.completedAt || 0) - new Date(a.completedAt || 0)
+    );
   }
 
   async getPending() {

@@ -13,7 +13,8 @@ const TaskCard = forwardRef(({
   onToggleComplete, 
   onEdit, 
   onDelete,
-  isCompleting = false
+  isCompleting = false,
+  isArchiveView = false
 }, ref) => {
   const priorityColors = {
     high: "priority-high border-accent-200",
@@ -86,22 +87,46 @@ return (
                   />
                 </div>
               )}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onEdit(task)}
-                className="h-8 w-8 p-0 text-gray-400 hover:text-primary-600"
-              >
-                <ApperIcon name="Edit" size={14} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onDelete(task.Id)}
-                className="h-8 w-8 p-0 text-gray-400 hover:text-accent-600"
-              >
-                <ApperIcon name="Trash2" size={14} />
-              </Button>
+              {isArchiveView ? (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onToggleComplete(task.Id)}
+                    className="h-8 w-8 p-0 text-gray-400 hover:text-primary-600"
+                    title="Restore task"
+                  >
+                    <ApperIcon name="RotateCcw" size={14} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onDelete(task.Id)}
+                    className="h-8 w-8 p-0 text-gray-400 hover:text-accent-600"
+                  >
+                    <ApperIcon name="Trash2" size={14} />
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onEdit(task)}
+                    className="h-8 w-8 p-0 text-gray-400 hover:text-primary-600"
+                  >
+                    <ApperIcon name="Edit" size={14} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onDelete(task.Id)}
+                    className="h-8 w-8 p-0 text-gray-400 hover:text-accent-600"
+                  >
+                    <ApperIcon name="Trash2" size={14} />
+                  </Button>
+                </>
+              )}
             </div>
           </div>
           
