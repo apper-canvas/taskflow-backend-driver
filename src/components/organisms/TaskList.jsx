@@ -197,7 +197,7 @@ const incompleteBulkActions = () => {
     <div className="space-y-6">
       {/* Incomplete Tasks */}
       {incompleteTasks.length > 0 && (
-        <div className="space-y-4">
+<div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-display font-semibold text-gray-900">
               Active Tasks ({incompleteTasks.length})
@@ -231,7 +231,7 @@ const incompleteBulkActions = () => {
                   onToggleComplete={handleToggleComplete}
                   onEdit={onEditTask}
                   onDelete={handleDeleteTask}
-                  isCompleting={completingTasks.has(task.Id)}
+isCompleting={completingTasks.has(task.Id)}
                   isSelected={selectedTasks.has(task.Id)}
                   onSelect={(isSelected) => onSelectTask && onSelectTask(task.Id, isSelected)}
                   showSelection={!isArchiveView}
@@ -253,7 +253,7 @@ const incompleteBulkActions = () => {
             <h2 className="text-lg font-display font-semibold text-gray-900">
               Completed Tasks ({completedTasks.length})
             </h2>
-            {(() => {
+{(() => {
               const completedTaskIds = completedTasks.map(t => t.Id);
               const selectedCompleted = completedTaskIds.filter(id => selectedTasks.has(id));
               
@@ -286,7 +286,7 @@ const incompleteBulkActions = () => {
                   onEdit={onEditTask}
                   onDelete={handleDeleteTask}
                   isCompleting={completingTasks.has(task.Id)}
-                  isArchiveView={isArchiveView}
+isArchiveView={isArchiveView}
                   isSelected={selectedTasks.has(task.Id)}
                   onSelect={(isSelected) => onSelectTask && onSelectTask(task.Id, isSelected)}
                   showSelection={!isArchiveView}

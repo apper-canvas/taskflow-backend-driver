@@ -29,7 +29,7 @@ const TaskManagerPage = () => {
 const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
-  const [selectedTasks, setSelectedTasks] = useState(new Set());
+const [selectedTasks, setSelectedTasks] = useState(new Set());
   // Load initial data
   const loadData = async () => {
     try {
@@ -112,7 +112,7 @@ const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     }
   };
 
-  // Bulk operations
+// Bulk operations
   const handleBulkComplete = async (taskIds) => {
     try {
       await taskService.bulkUpdate(taskIds, {
@@ -147,7 +147,7 @@ const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     }
   };
 
-  const handleSelectTask = (taskId, isSelected) => {
+const handleSelectTask = (taskId, isSelected) => {
     setSelectedTasks(prev => {
       const newSet = new Set(prev);
       if (isSelected) {
@@ -339,7 +339,7 @@ tasks={showCompleted ? tasks : tasks.filter(task => !task.completed)}
                 searchTerm={searchTerm}
                 selectedCategory={selectedCategory}
                 sortBy={sortBy}
-                selectedTasks={selectedTasks}
+selectedTasks={selectedTasks}
                 onSelectTask={handleSelectTask}
                 onBulkComplete={handleBulkComplete}
                 onBulkDelete={handleBulkDelete}
